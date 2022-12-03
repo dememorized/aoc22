@@ -15,6 +15,7 @@ copyright:           "2022 Emil Tullstedt"
 dependencies:
 - base >= 4.7 && < 5
 - file-embed > 0
+- containers
 - HUnit >= 1.6 && < 2
 
 ghc-options:

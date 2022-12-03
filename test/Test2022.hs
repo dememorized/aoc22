@@ -12,7 +12,8 @@ import Lib2022
 tests2022 :: Test
 tests2022 = TestList [
     day01test,
-    day02test
+    day02test,
+    day03test
     ]
 
 day01sample :: String
@@ -37,4 +38,16 @@ day02test :: Test
 day02test = TestList [
     TestLabel "Day 2 Sample" $ TestCase $ assertEqual "Test" (15, 12) (day02 day02sample),
     TestLabel "Day 2 Input" $ TestCase $ assertEqual "Test" (13565, 12424) (day02 day02input)
+    ]
+
+day03sample :: String
+day03sample = "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+
+day03input :: IsString a => a
+day03input = $(embedStringFile "test/2022/03")
+
+day03test :: Test
+day03test = TestList [
+    TestLabel "Day 3 Sample" $ TestCase $ assertEqual "Test" (157, 70) (day03 day03sample),
+    TestLabel "Day 3 Input" $ TestCase $ assertEqual "Test" (7793, 2499) (day03 day03input)
     ]

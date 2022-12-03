@@ -2,10 +2,13 @@
 
 module Lib2022 (
     day01,
-    day02
+    day02,
+    day03
     ) where
 
 import Lib
+import Data.Char (ord)
+import qualified Data.Set as Set
 
 day01 :: String -> (Int, Int)
 day01 s = (day01task1 s, day01task2 s)
@@ -71,3 +74,37 @@ day02strategy opp strat
     | strat == "Y" = day02score opp draw
     | otherwise = day02score opp lose
     where (lose, draw, win) = day02trie opp
+
+day03 :: String -> (Int, Int)
+day03 s = (day03task1 compartments, day03task2 rucksacks)
+    where
+        rucksacks = lines s
+        compartments = map day03compartments (lines s)
+
+day03compartments :: String -> (String, String)
+day03compartments s = (take half s, drop half s)
+    where half = div (length s) 2
+
+day03task1 :: [(String, String)] -> Int
+day03task1 [] = 0
+day03task1 ((a, b):rest) = day03values (day03overlappingChars a b) + day03task1 rest
+
+day03task2 :: [String] -> Int
+day03task2 [] = 0
+day03task2 (first:second:third:rest) = val + day03task2 rest
+    where
+        fstSnd = day03overlappingChars first second
+        val = day03values (day03overlappingChars fstSnd third)
+day03task2 _ = error "expected all groups to be groups of threes"
+
+day03overlappingChars :: String -> String -> String
+day03overlappingChars a b = Set.toList $ Set.intersection (Set.fromList a) (Set.fromList b)
+
+day03values :: String -> Int
+day03values xs = sum (map day03value xs)
+
+day03value :: Char -> Int
+day03value c
+    | c >= 'a' && c <= 'z' = ord c - ord 'a' + 1
+    | c >= 'A' && c <= 'Z' = ord c - ord 'A' + 27
+    | otherwise = error "not an alphabetical character"
