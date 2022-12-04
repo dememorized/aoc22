@@ -39,13 +39,13 @@ nextSubstring xs eq coll =
         x = head xs
         rest = tail xs
 
-readUntil :: String -> Char -> (String, String)
+readUntil :: String -> Char -> [String]
 readUntil s c = readUntil' s c ""
 
-readUntil' :: String -> Char -> String -> (String, String)
-readUntil' [] _ coll = (reverse coll, [])
+readUntil' :: String -> Char -> String -> [String]
+readUntil' [] _ coll = [reverse coll]
 readUntil' (first : rest) c coll
-    | first == c = (reverse coll, rest)
+    | first == c = [reverse coll, rest]
     | otherwise = readUntil' rest c (first : coll)
 
 sort :: Ord sortable => [sortable] -> [sortable]
