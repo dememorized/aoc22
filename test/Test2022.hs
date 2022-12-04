@@ -13,7 +13,8 @@ tests2022 :: Test
 tests2022 = TestList [
     day01test,
     day02test,
-    day03test
+    day03test,
+    day04test
     ]
 
 day01sample :: String
@@ -50,4 +51,16 @@ day03test :: Test
 day03test = TestList [
     TestLabel "Day 3 Sample" $ TestCase $ assertEqual "Test" (157, 70) (day03 day03sample),
     TestLabel "Day 3 Input" $ TestCase $ assertEqual "Test" (7793, 2499) (day03 day03input)
+    ]
+
+day04sample :: String
+day04sample = "2-4,6-8\n2-3,4-5\n5-7,7-9\n2-8,3-7\n6-6,4-6\n2-6,4-8"
+
+day04input :: IsString a => a
+day04input = $(embedStringFile "test/2022/04")
+
+day04test :: Test
+day04test = TestList [
+    TestLabel "Day 4 Sample" $ TestCase $ assertEqual "Test" (2, 4) (day04 day04sample),
+    TestLabel "Day 4 Input" $ TestCase $ assertEqual "Test" (444, 801) (day04 day04input)
     ]

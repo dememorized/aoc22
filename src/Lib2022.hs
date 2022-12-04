@@ -3,7 +3,8 @@
 module Lib2022 (
     day01,
     day02,
-    day03
+    day03,
+    day04
     ) where
 
 import Lib
@@ -108,3 +109,30 @@ day03value c
     | c >= 'a' && c <= 'z' = ord c - ord 'a' + 1
     | c >= 'A' && c <= 'Z' = ord c - ord 'A' + 27
     | otherwise = error "not an alphabetical character"
+
+day04 :: String -> (Int, Int)
+day04 s = (day04task1 s, day04task2 s)
+
+day04task1 :: String -> Int
+day04task1 s = length (filter day04superset elfs)
+    where elfs = map day04subranges (lines s)
+
+day04task2 :: String -> Int
+day04task2 s = length (filter day04overlap elfs)
+    where elfs = map day04subranges (lines s)
+
+day04superset :: ((Int, Int), (Int, Int)) -> Bool
+day04superset ((aA, aZ), (bA, bZ)) = (aA <= bA && aZ >= bZ) || (bA <= aA && bZ >= aZ)
+
+day04overlap :: ((Int, Int), (Int, Int)) -> Bool
+day04overlap ((aA, aZ), (bA, bZ)) = start <= end
+    where
+        start = max aA bA
+        end = min aZ bZ
+
+day04subranges :: String -> ((Int, Int), (Int, Int))
+day04subranges s = ((atoi aA, atoi aZ), (atoi bA, atoi bZ))
+    where
+        (a, b) = readUntil s ','
+        (aA, aZ) = readUntil a '-'
+        (bA, bZ) = readUntil b '-'

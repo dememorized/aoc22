@@ -5,7 +5,8 @@ module Lib
       linesOfInts,
       labeledInt,
       separateSubstrings,
-      sort
+      sort,
+      readUntil
     ) where
 
 atoi :: String -> Int
@@ -37,6 +38,15 @@ nextSubstring xs eq coll =
     where
         x = head xs
         rest = tail xs
+
+readUntil :: String -> Char -> (String, String)
+readUntil s c = readUntil' s c ""
+
+readUntil' :: String -> Char -> String -> (String, String)
+readUntil' [] _ coll = (reverse coll, [])
+readUntil' (first : rest) c coll
+    | first == c = (reverse coll, rest)
+    | otherwise = readUntil' rest c (first : coll)
 
 sort :: Ord sortable => [sortable] -> [sortable]
 sort [] = []
