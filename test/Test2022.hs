@@ -68,8 +68,8 @@ day04test = TestList [
 
 day05test :: Test
 day05test = TestList [
-    TestLabel "Day 5 Sample" $ TestCase $ assertEqual "Test" ("CMZ", "") (day05 sample),
-    TestLabel "Day 5 Input" $ TestCase $ assertEqual "Test" ("VRWBSFZWM", "") (day05 input)
+    TestLabel "Day 5 Sample" $ TestCase $ assertEqual "Test" ("CMZ", "MCD") (day05 sample),
+    TestLabel "Day 5 Input" $ TestCase $ assertEqual "Test" ("VRWBSFZWM", "RBTWJWMCF") (day05 input)
     ]
     where
         sample = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"

@@ -118,7 +118,10 @@ day04subranges s = ((elfs !! 0 !! 0, elfs !! 0 !! 1), (elfs !! 1 !! 0, elfs !! 1
     where elfs = map (map atoi) . map (\elf -> readUntil elf '-') $ readUntil s ','
 
 day05 :: String -> (String, String)
-day05 s = (day05top . foldl day05moveInstruction stack $ lines s, "")
+day05 s = (
+        day05top . foldl (day05moveInstruction day05moveRepeated) stack $ lines s,
+        day05top . foldl (day05moveInstruction day05move) stack $ lines s
+    )
     where stack = day05stack . reverse $ lines s
 
 day05print :: String -> String
@@ -158,28 +161,24 @@ day05readLine' [] len = day05readLine [] len
 day05readLine' _ _ = error "invalid formatting (2)"
 
 
-day05moveInstruction :: Day05Stack -> String -> Day05Stack
-day05moveInstruction curr ('m' : 'o' : 'v' : 'e' : ' ': rest) = day05moveRepeated curr (atoi n) (atoi from) (atoi to)
+day05moveInstruction :: (Day05Stack -> Int -> Int -> Int -> Day05Stack) -> Day05Stack -> String -> Day05Stack
+day05moveInstruction fn curr ('m' : 'o' : 'v' : 'e' : ' ': rest) = fn curr (atoi n) (atoi from) (atoi to)
     where
         (n, rest1) = span (/= ' ') rest
         (from, rest2) = span (/= ' ') $ drop 6 rest1 -- ' from '
         to = drop 4 rest2 -- ' to '
-day05moveInstruction curr _ = curr
+day05moveInstruction _ curr _ = curr
 
 day05moveRepeated :: Day05Stack -> Int -> Int -> Int -> Day05Stack
 day05moveRepeated stack 0 _ _ = stack
-day05moveRepeated stack n from to = day05moveRepeated (day05move stack from to) (n-1) from to
+day05moveRepeated stack n from to = day05moveRepeated (day05move stack 1 from to) (n-1) from to
 
-day05move :: Day05Stack -> Int -> Int -> Day05Stack
-day05move stack from to = replaceNth fromReplaced (to-1) (fromHead ++ stack !! (to-1))
+day05move :: Day05Stack -> Int -> Int -> Int -> Day05Stack
+day05move stack n from to = replaceNth fromReplaced (to-1) (fromHead ++ stack !! (to-1))
     where
         fromList = stack !! (from-1)
-        fromReplaced = if (length fromList) <= 0
-            then stack
-            else replaceNth stack (from-1) (tail fromList)
-        fromHead = if (length fromList) <= 0
-            then ""
-            else [head fromList]
+        fromReplaced = replaceNth stack (from-1) $ drop n fromList
+        fromHead = take n fromList
 
 day05top :: Day05Stack -> String
 day05top stack = map (\x -> if length x == 0 then ' ' else head x) stack
