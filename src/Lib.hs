@@ -6,7 +6,8 @@ module Lib
       labeledInt,
       separateSubstrings,
       sort,
-      readUntil
+      readUntil,
+      replaceNth
     ) where
 
 atoi :: String -> Int
@@ -56,3 +57,10 @@ sort xs = (sort lesser) ++ eq ++ (sort greater)
         lesser  = filter (< x) xs
         greater = filter (> x) xs
         eq = filter (== x) xs
+
+replaceNth :: [a]->Int->a->[a]
+replaceNth [] _ _ = []
+replaceNth curr n new = if length rhs == 0
+        then lhs ++ [new]
+        else lhs ++ [new] ++ (tail rhs)
+    where (lhs, rhs) = splitAt n curr

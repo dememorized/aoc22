@@ -14,7 +14,8 @@ tests2022 = TestList [
     day01test,
     day02test,
     day03test,
-    day04test
+    day04test,
+    day05test
     ]
 
 day01sample :: String
@@ -64,3 +65,12 @@ day04test = TestList [
     TestLabel "Day 4 Sample" $ TestCase $ assertEqual "Test" (2, 4) (day04 day04sample),
     TestLabel "Day 4 Input" $ TestCase $ assertEqual "Test" (444, 801) (day04 day04input)
     ]
+
+day05test :: Test
+day05test = TestList [
+    TestLabel "Day 5 Sample" $ TestCase $ assertEqual "Test" ("CMZ", "") (day05 sample),
+    TestLabel "Day 5 Input" $ TestCase $ assertEqual "Test" ("VRWBSFZWM", "") (day05 input)
+    ]
+    where
+        sample = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"
+        input = $(embedStringFile "test/2022/05")
