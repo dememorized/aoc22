@@ -5,8 +5,7 @@ module Lib2022 (
     day02,
     day03,
     day04,
-    day05,
-    day05print
+    day05
     ) where
 
 import Lib
@@ -124,19 +123,11 @@ day05 s = (
     )
     where stack = day05stack . reverse $ lines s
 
-day05print :: String -> String
-day05print s = visual
-    where
-        stack = day05stack . reverse $ lines s
-        maxLen = maximum $ map length stack
-        expandStack = map (\st -> (take (maxLen - (length st)) (repeat ' ')) ++ st) stack
-        visual = foldl (\curr st -> curr ++ ['\n'] ++ st) "" expandStack
-
 type Day05Stack = [[Char]]
 
 day05stack :: [String] -> Day05Stack
 day05stack [] = []
-day05stack ((' ' : '1' : line): rest) = day05stack' rest (take columns $ repeat "")
+day05stack ((' ' : '1' : line): rest) = day05stack' rest $ take columns $ repeat ""
         where
             -- 4 characters per column, we have already extracted 2 characters, and the last element misses the trailing space
             columns = div ((length line) + 3) 4
@@ -147,7 +138,7 @@ day05stack' [] coll = coll
 day05stack' (l:rest) coll = day05stack' rest (day05applyLine l coll)
 
 day05applyLine :: String -> Day05Stack -> Day05Stack
-day05applyLine l coll = map (\(curr, add) -> add ++ curr) . zip coll $ day05readLine l (length coll)
+day05applyLine l coll = map (\(curr, add) -> add ++ curr) . zip coll $ day05readLine l $ length coll
 
 day05readLine :: String -> Int -> [String]
 day05readLine [] len = take len $ repeat ""
@@ -160,9 +151,8 @@ day05readLine' (' ' : rest) len = day05readLine rest len
 day05readLine' [] len = day05readLine [] len
 day05readLine' _ _ = error "invalid formatting (2)"
 
-
 day05moveInstruction :: (Day05Stack -> Int -> Int -> Int -> Day05Stack) -> Day05Stack -> String -> Day05Stack
-day05moveInstruction fn curr ('m' : 'o' : 'v' : 'e' : ' ': rest) = fn curr (atoi n) (atoi from) (atoi to)
+day05moveInstruction fn curr ('m' : 'o' : 'v' : 'e' : ' ': rest) = fn curr (atoi n) ((atoi from)-1) ((atoi to)-1)
     where
         (n, rest1) = span (/= ' ') rest
         (from, rest2) = span (/= ' ') $ drop 6 rest1 -- ' from '
@@ -174,11 +164,10 @@ day05moveRepeated stack 0 _ _ = stack
 day05moveRepeated stack n from to = day05moveRepeated (day05move stack 1 from to) (n-1) from to
 
 day05move :: Day05Stack -> Int -> Int -> Int -> Day05Stack
-day05move stack n from to = replaceNth fromReplaced (to-1) (fromHead ++ stack !! (to-1))
+day05move stack n from to = replaceNth fromReplaced to (moves ++ stack !! to)
     where
-        fromList = stack !! (from-1)
-        fromReplaced = replaceNth stack (from-1) $ drop n fromList
-        fromHead = take n fromList
+        (moves, stays) = splitAt n $ stack !! from
+        fromReplaced = replaceNth stack from stays
 
 day05top :: Day05Stack -> String
 day05top stack = map (\x -> if length x == 0 then ' ' else head x) stack
