@@ -180,5 +180,5 @@ day06uniqueSubsequence :: String -> Int -> Int -> Int
 day06uniqueSubsequence s n i
     | length(s) < n = -1
     | unique == n = i
-    | otherwise = day06uniqueSubsequence (tail s) n i+1
+    | otherwise = day06uniqueSubsequence (tail s) n (i+1)
     where unique = length . Set.fromList $ take n s

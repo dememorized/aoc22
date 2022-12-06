@@ -84,6 +84,7 @@ day06test = TestList $ [
         samples)
     where
         samples = [
+                ((-1, -1), "abcab"),
                 ((7, 19), "mjqjpqmgbljsphdztnvjfqwrcgsmlb"),
                 ((5, 23), "bvwbjplbgvbhsrlpgdmjqwftvncz"),
                 ((6, 23), "nppdvjthqldpwncqszvftbrmjlhg"),
