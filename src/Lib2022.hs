@@ -174,7 +174,7 @@ day05top :: Day05Stack -> String
 day05top stack = map (\x -> if length x == 0 then ' ' else head x) stack
 
 day06 :: String -> (Int, Int)
-day06 s = (day06uniqueSubsequence s 4 4, 0)
+day06 s = (day06uniqueSubsequence s 4 4, day06uniqueSubsequence s 14 14)
 
 day06uniqueSubsequence :: String -> Int -> Int -> Int
 day06uniqueSubsequence s n i

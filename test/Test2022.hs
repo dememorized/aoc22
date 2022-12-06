@@ -78,16 +78,16 @@ day05test = TestList [
 
 day06test :: Test
 day06test = TestList $ [
-    TestLabel "Day 6 Input" $ TestCase $ assertEqual "Test" (0, 0) (day06 input)
+    TestLabel "Day 6 Input" $ TestCase $ assertEqual "Test" (1300,3986) (day06 input)
     ] ++ (map
         (\(expected, s) -> TestLabel ("Day 6 Sample: " ++ s) $ TestCase $ assertEqual "Test" expected (day06 s))
         samples)
     where
         samples = [
-                ((7, 0), "mjqjpqmgbljsphdztnvjfqwrcgsmlb"),
-                ((5, 0), "bvwbjplbgvbhsrlpgdmjqwftvncz"),
-                ((6, 0), "nppdvjthqldpwncqszvftbrmjlhg"),
-                ((10, 0), "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"),
-                ((11, 0), "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")
+                ((7, 19), "mjqjpqmgbljsphdztnvjfqwrcgsmlb"),
+                ((5, 23), "bvwbjplbgvbhsrlpgdmjqwftvncz"),
+                ((6, 23), "nppdvjthqldpwncqszvftbrmjlhg"),
+                ((10, 29), "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"),
+                ((11, 26), "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")
             ]
         input = $(embedStringFile "test/2022/06")
