@@ -15,7 +15,8 @@ tests2022 = TestList [
     day02test,
     day03test,
     day04test,
-    day05test
+    day05test,
+    day06test
     ]
 
 day01sample :: String
@@ -74,3 +75,19 @@ day05test = TestList [
     where
         sample = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"
         input = $(embedStringFile "test/2022/05")
+
+day06test :: Test
+day06test = TestList $ [
+    TestLabel "Day 6 Input" $ TestCase $ assertEqual "Test" (0, 0) (day06 input)
+    ] ++ (map
+        (\(expected, s) -> TestLabel ("Day 6 Sample: " ++ s) $ TestCase $ assertEqual "Test" expected (day06 s))
+        samples)
+    where
+        samples = [
+                ((7, 0), "mjqjpqmgbljsphdztnvjfqwrcgsmlb"),
+                ((5, 0), "bvwbjplbgvbhsrlpgdmjqwftvncz"),
+                ((6, 0), "nppdvjthqldpwncqszvftbrmjlhg"),
+                ((10, 0), "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"),
+                ((11, 0), "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")
+            ]
+        input = $(embedStringFile "test/2022/06")
