@@ -6,7 +6,10 @@ module Lib2022 (
     day03,
     day04,
     day05,
-    day06
+    day06,
+    day07,
+    day07readFiles,
+    day07prompt
     ) where
 
 import Lib
@@ -182,3 +185,62 @@ day06uniqueSubsequence s n i
     | unique == n = i
     | otherwise = day06uniqueSubsequence (tail s) n (i+1)
     where unique = length . Set.fromList $ take n s
+
+day07 :: String -> (Int, Int)
+day07 s = (
+        sum . filter (<100000) $ map day07dirSize allDirectories,
+        head . sort . filter (>= missingSpace) $ map day07dirSize allDirectories
+        )
+    where
+        session = day07prompt "" (lines s) []
+        rootSize = day07dirSize $ day07nodesRecursive session ""
+        missingSpace = 30000000 - (70000000 - rootSize)
+        allDirectories = map (day07nodesRecursive session) . map (\(File dir _ _) -> dir) $ day07directories session
+
+day07directories :: [[Node]] -> [Node]
+day07directories fs = filter (\(File _ filename _) -> filename == "") . concat $ fs
+
+day07nodesRecursive :: [[Node]] -> String -> [Node]
+day07nodesRecursive fs cwd = filter (\(File dir _ _) -> cwd == (take (length cwd) dir)) . concat $ fs
+
+day07dirSize :: [Node] -> Int
+day07dirSize nodes = sum $ map (\(File _ _ size) -> size) nodes
+
+data Op = ChDir String | DirListing String [Node] deriving (Eq, Ord, Show)
+data Node = File String String Int deriving (Eq, Ord, Show)
+
+day07prompt :: String -> [String] -> [[Node]] -> [[Node]]
+day07prompt _ [] state = state
+day07prompt cwd input state = case cmd of
+    DirListing _ nodes -> day07prompt cwd nextInput (nodes : state)
+    ChDir newDir -> day07prompt newDir nextInput state
+    where
+        (cmd, nextInput) = day07prompt' cwd input
+
+day07prompt' :: String -> [String] -> (Op, [String])
+day07prompt' cwd (('$': ' ': cmd): output) = case (day07parseCommand cwd cmd) of
+    DirListing _ _ -> day07readFiles cwd output
+    ChDir newDir -> (ChDir newDir, output)
+day07prompt' _ _ = error "expected each line of prompt to start with $"
+
+day07readFiles :: String -> [String] -> (Op, [String])
+day07readFiles cwd output = (DirListing cwd nodes, rest)
+    where
+        (files, rest) = break (\s -> (head s) == '$') output
+        nodes = map (day07readFile cwd) . map (words) $ files
+
+day07readFile :: String -> [String] -> Node
+day07readFile cwd ("dir": name : []) = File (cwd ++ "/" ++ name) "" 0 
+day07readFile cwd xs = File cwd (last xs) (atoi $ head xs)
+
+day07parseCommand :: String -> String -> Op
+day07parseCommand cwd cmd
+    | take 3 cmd == "cd " = day07chdir cwd $ drop 3 cmd
+    | take 2 cmd == "ls" = DirListing cwd []
+    | otherwise = error "no such command or directory"
+
+day07chdir :: String -> String -> Op
+day07chdir cwd newDir
+    | newDir == "/" = ChDir ""
+    | newDir == ".." = ChDir $ reverse . dropWhile (== '/') . dropWhile (/= '/') $ reverse cwd
+    | otherwise = ChDir $ cwd ++ "/" ++ newDir

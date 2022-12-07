@@ -16,7 +16,8 @@ tests2022 = TestList [
     day03test,
     day04test,
     day05test,
-    day06test
+    day06test,
+    day07test
     ]
 
 day01sample :: String
@@ -92,3 +93,13 @@ day06test = TestList $ [
                 ((11, 26), "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw")
             ]
         input = $(embedStringFile "test/2022/06")
+
+day07test :: Test
+day07test = TestList $ map
+        (\(expected, filename, s) -> TestLabel ("Day 7 " ++ filename) $ TestCase $ assertEqual "Test" expected (day07 s))
+        tests
+    where
+        tests = [
+                ((95437, 24933642), "07.sample", $(embedStringFile "test/2022/07.sample")),
+                ((1648397, 1815525), "07", $(embedStringFile "test/2022/07"))
+            ]
